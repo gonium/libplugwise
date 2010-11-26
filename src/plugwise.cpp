@@ -39,7 +39,26 @@ std::string getStickInitCode() {
   return retval;
 }
 
+void send_payload(int tty_fd, std::string payload) {
+  //unsigned char initcode[]="\x05\x05\x03\x03\x30\x30\x30\x41\x42\x34\x33\x43\x0d\x0a";
+  unsigned char prefix[]="\x05\x05\x03\x03";
+  //unsigned char crc16[] = "\x42\x34\x33\x43";
+  crc_plugwise_type  crc16_calc;
+  crc16_calc.process_bytes( payload.c_str(), payload.length());
+  std::ostringstream oss;
+  oss << std::hex << std::uppercase << crc16_calc.checksum();
+  std::string crc16(oss.str());
+  unsigned char suffix[]= "\x0d\x0a";
+    
+  std::cout.setf(std::ios_base::hex, std::ios_base::basefield);
+  std::cout.setf(std::ios_base::showbase);
+  std::cout << "Payload: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
+  write(tty_fd, &prefix, 4);
+  write(tty_fd, payload.c_str(), payload.length());
+  write(tty_fd, crc16.c_str(), 4);
+  write(tty_fd, &suffix, 2);
 
+}
 
 int main(int argc,char** argv) {
   struct termios tio;
@@ -64,25 +83,7 @@ int main(int argc,char** argv) {
   cfsetispeed(&tio,B115200);			// 9600 baud
   tcsetattr(tty_fd,TCSANOW,&tio);
 
-  //unsigned char initcode[]="\x05\x05\x03\x03\x30\x30\x30\x41\x42\x34\x33\x43\x0d\x0a";
-  unsigned char prefix[]="\x05\x05\x03\x03";
-  unsigned char payload[] = "000A";
-  //unsigned char crc16[] = "\x42\x34\x33\x43";
-  crc_plugwise_type  crc16_calc;
-  crc16_calc.process_bytes( payload, 4);
-  std::ostringstream oss;
-  oss << std::hex << std::uppercase << crc16_calc.checksum();
-  std::string crc16(oss.str());
-  unsigned char suffix[]= "\x0d\x0a";
-    
-  std::cout.setf(std::ios_base::hex, std::ios_base::basefield);
-  std::cout.setf(std::ios_base::showbase);
-  std::cout << "Initcode: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
-  write(tty_fd, &prefix, 4);
-  write(tty_fd, &payload, 4);
-  write(tty_fd, crc16.c_str(), 4);
-  write(tty_fd, &suffix, 2);
-
+  
   //std::string initcode=getStickInitCode();
   //std::string::iterator it;
 
@@ -97,6 +98,10 @@ int main(int argc,char** argv) {
   //write(tty_fd, &foo, 1);
   //}
   
+  send_payload(tty_fd, "000A");
+  send_payload(tty_fd, "0026000D6F00007293BD");
+  send_payload(tty_fd, "0012000D6F00007293BD");
+
   std::cout << std::endl << "Reading stick response" << std::endl;
   while (true) {
     if (read(tty_fd,&c,1)>0) 
