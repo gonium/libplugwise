@@ -1,5 +1,5 @@
 # -*- mode: cmake; -*-
-project(libehz)
+project(libplugwise)
 cmake_minimum_required(VERSION "2.6" FATAL_ERROR)
 if(POLICY CMP0011)
   cmake_policy(SET CMP0011 NEW)
@@ -69,10 +69,10 @@ SET(CPACK_PACKAGE_VERSION_MAJOR ${V_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${V_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${V_PATCH})
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
-SET(CPACK_PACKAGE_EXECUTABLES "ehzread" "Retrieve energy consumption
-data from an eHZ")
+SET(CPACK_PACKAGE_EXECUTABLES "plugwise" "Retrieve energy consumption
+data from a plugwise installation")
 SET(CPACK_SOURCE_STRIP_FILES "")
-SET(CPACK_STRIP_FILES "bin/ehzread")
+SET(CPACK_STRIP_FILES "bin/plugwise")
 INCLUDE(CPack)
 
 
