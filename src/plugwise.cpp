@@ -26,6 +26,10 @@
 #include <iterator>
 #include <fcntl.h>
 #include <termios.h>
+#include <boost/crc.hpp>
+
+typedef boost::crc_optimal<16, 0x1021, 0, 0, false, false> crc_plugwise_type;
+
 
 std::string getStickInitCode() {
   // <ENQ><ENQ><ETX><ETX>000AB43C<CR><LF>
@@ -60,14 +64,24 @@ int main(int argc,char** argv) {
   cfsetispeed(&tio,B115200);			// 9600 baud
   tcsetattr(tty_fd,TCSANOW,&tio);
 
-  //unsigned char initcode[]="\x05\x05\x03\x03\x00\x00\x00\x0a\xb4\x3c\x0d\x0a";
-  unsigned char initcode[]="\x05\x05\x03\x03\x30\x30\x30\x41\x42\x34\x33\x43\x0d\x0a";
-    
+  //unsigned char initcode[]="\x05\x05\x03\x03\x30\x30\x30\x41\x42\x34\x33\x43\x0d\x0a";
+  unsigned char prefix[]="\x05\x05\x03\x03";
+  unsigned char payload[] = "000A";
+  //unsigned char crc16[] = "\x42\x34\x33\x43";
+  crc_plugwise_type  crc16_calc;
+  crc16_calc.process_bytes( payload, 4);
+  std::ostringstream oss;
+  oss << std::hex << std::uppercase << crc16_calc.checksum();
+  std::string crc16(oss.str());
+  unsigned char suffix[]= "\x0d\x0a";
     
   std::cout.setf(std::ios_base::hex, std::ios_base::basefield);
   std::cout.setf(std::ios_base::showbase);
-  std::cout << "Initcode: " << initcode << std::endl;
-  write(tty_fd, &initcode, 14);
+  std::cout << "Initcode: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
+  write(tty_fd, &prefix, 4);
+  write(tty_fd, &payload, 4);
+  write(tty_fd, crc16.c_str(), 4);
+  write(tty_fd, &suffix, 2);
 
   //std::string initcode=getStickInitCode();
   //std::string::iterator it;

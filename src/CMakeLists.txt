@@ -2,7 +2,7 @@
 set(plugwise_src plugwise.cpp)
 
 #include_directories(${CMAKE_SOURCE_DIR}/libflukso ${CMAKE_CURRENT_SOURCE_DIR})
-include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR} ${Boost_INCLUDE_DIRS})
 add_executable(plugwise ${plugwise_src})
 
 # Link the executable 

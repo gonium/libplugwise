@@ -47,8 +47,11 @@ set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_PROFILE} -ftest-coverage")
 # Releases are made with the release build. Optimize code.
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -Wno-non-virtual-dtor -Werror")
 
-# allways set these flags
+# always set these flags
 set(CMAKE_CXX_FLAGS "-Wall ")
+
+FIND_PACKAGE(Boost 1.34.1 COMPONENTS crc)
+
 
 # Check for some compiler stuff
 include(CMakeBackwardCompatibilityCXX)
@@ -80,4 +83,5 @@ INCLUDE(CPack)
 message("")
 message("***** Configuration *****")
 message("  prefix: ${CMAKE_INSTALL_PREFIX}")
+message("  boost include: ${Boost_INCLUDE_DIRS}")
 
