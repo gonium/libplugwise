@@ -19,25 +19,25 @@
  */
 
 #include <cstdlib>
+#include <unistd.h>
 #include <iostream>
 #include <cstring>
 #include <sstream>
 #include <string>
+#include <vector>
 #include <iterator>
 #include <fcntl.h>
 #include <termios.h>
 #include <boost/crc.hpp>
 
+enum response_state_t {
+  start, 
+  prefix_1, prefix_2, prefix_3,
+  message,
+  suffix_1, suffix_2
+};
+
 typedef boost::crc_optimal<16, 0x1021, 0, 0, false, false> crc_plugwise_type;
-
-
-std::string getStickInitCode() {
-  // <ENQ><ENQ><ETX><ETX>000AB43C<CR><LF>
-  char initcode[]="\x05\x05\x03\x03\x00\x00\x00\x0a\xb4\x3c\x0d\x0a";
-  std::string retval(initcode);
-  std::cout << "Prepared init string: " << retval << std::endl;
-  return retval;
-}
 
 void send_payload(int tty_fd, std::string payload) {
   //unsigned char initcode[]="\x05\x05\x03\x03\x30\x30\x30\x41\x42\x34\x33\x43\x0d\x0a";
@@ -52,12 +52,50 @@ void send_payload(int tty_fd, std::string payload) {
     
   std::cout.setf(std::ios_base::hex, std::ios_base::basefield);
   std::cout.setf(std::ios_base::showbase);
-  std::cout << "Payload: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
+  std::cout << "--> Payload: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
   write(tty_fd, &prefix, 4);
   write(tty_fd, payload.c_str(), payload.length());
   write(tty_fd, crc16.c_str(), 4);
   write(tty_fd, &suffix, 2);
+}
 
+void read_response(int tty_fd) {
+  // We need a state machine to detect the boundaries of the message.
+  enum response_state_t state=start;
+  bool received=false;
+  unsigned char c;
+  std::vector<unsigned char> buffer;
+  while (!received) {
+    if (read(tty_fd,&c,1)>0) {
+      // if new data is available on the serial port, print it out
+      //std::cout << &c;
+      switch (state) {
+        case start:
+          if (c == '\x05') state = prefix_1; break;
+        case prefix_1:
+           if (c == '\x05') state = prefix_2; break;
+        case prefix_2:
+           if (c == '\x03') state = prefix_3; break;
+        case prefix_3:
+           if (c == '\x03') state = message; break;
+        case message:
+          if (c != '\x0d') 
+            buffer.push_back(c);
+          else {
+            state = suffix_2; 
+            received = true; 
+          }
+          break;
+      }
+    }
+  }
+  if (buffer.size() != 0) {
+    std::ostringstream oss;
+    std::vector<unsigned char>::iterator it;
+    for (it = buffer.begin(); it != buffer.end(); ++it) 
+      oss << (*it);
+    std::cout << "<-- Response: " << oss.str() << std::endl;
+  }
 }
 
 int main(int argc,char** argv) {
@@ -65,7 +103,6 @@ int main(int argc,char** argv) {
   int tty_fd;
   //fd_set rdset;
 
-  unsigned char c='X';
 
   std::cout << "Please start with " << argv[0] << 
     " /dev/ttyS1 (for example)" << std::endl;
@@ -83,7 +120,7 @@ int main(int argc,char** argv) {
   cfsetispeed(&tio,B115200);			// 9600 baud
   tcsetattr(tty_fd,TCSANOW,&tio);
 
-  
+
   //std::string initcode=getStickInitCode();
   //std::string::iterator it;
 
@@ -97,18 +134,20 @@ int main(int argc,char** argv) {
   //  std::cout << std::hex << foo << ":";
   //write(tty_fd, &foo, 1);
   //}
-  
-  send_payload(tty_fd, "000A");
-  send_payload(tty_fd, "0026000D6F00007293BD");
-  send_payload(tty_fd, "0012000D6F00007293BD");
 
-  std::cout << std::endl << "Reading stick response" << std::endl;
-  while (true) {
-    if (read(tty_fd,&c,1)>0) 
-      // if new data is available on the serial port, print it out
-      std::cout << &c;
-     // printf("%#o", &c);
-  }
+  std::cout << "### Initializing stick" << std::endl;
+  send_payload(tty_fd, "000A");
+  read_response(tty_fd);
+  read_response(tty_fd);
+  std::cout << "### Sending calibration request " << std::endl;
+  send_payload(tty_fd, "0026000D6F00007293BD");
+  read_response(tty_fd);
+  read_response(tty_fd);
+  std::cout << "### Sending power information request " << std::endl;
+  send_payload(tty_fd, "0012000D6F00007293BD");
+  read_response(tty_fd);
+  read_response(tty_fd);
+
 
   close(tty_fd);
 }
