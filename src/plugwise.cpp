@@ -30,11 +30,12 @@
 #include <termios.h>
 #include <boost/crc.hpp>
 
+#include <connection.hpp>
+
 enum response_state_t {
   start, 
   prefix_1, prefix_2, prefix_3,
-  message,
-  suffix_1, suffix_2
+  message
 };
 
 typedef boost::crc_optimal<16, 0x1021, 0, 0, false, false> crc_plugwise_type;
@@ -82,7 +83,6 @@ void read_response(int tty_fd) {
           if (c != '\x0d') 
             buffer.push_back(c);
           else {
-            state = suffix_2; 
             received = true; 
           }
           break;
@@ -147,7 +147,9 @@ int main(int argc,char** argv) {
   send_payload(tty_fd, "0012000D6F00007293BD");
   read_response(tty_fd);
   read_response(tty_fd);
-
-
   close(tty_fd);
+
+  plugwise::Connection::Ptr con(new plugwise::Connection("foo"));
+  con->send();
+  
 }

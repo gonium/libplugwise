@@ -58,6 +58,7 @@ include(CMakeBackwardCompatibilityCXX)
 
 # Reflect the package structure
 add_subdirectory(src)
+add_subdirectory(libplugwise)
 
 # add some files to the installation target
 INSTALL(FILES README LICENSE DESTINATION share/doc/libflukso)
