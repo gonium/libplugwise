@@ -19,6 +19,9 @@
  */
 
 #include <connection.hpp>
+#include <requestfactory.hpp>
+#include <request.hpp>
+
 
 int main(int argc,char** argv) {
 
@@ -26,10 +29,11 @@ int main(int argc,char** argv) {
     " /dev/ttyS1 (for example)" << std::endl;
 
   plugwise::Connection::Ptr con(new plugwise::Connection(argv[1]));
-
+  plugwise::RequestFactory::Ptr reqFactory(new plugwise::RequestFactory("deviceid"));
 
   std::cout << "### Initializing stick" << std::endl;
-  con->send_payload("000A");
+  plugwise::Request::Ptr sir=reqFactory->getStickInitRequest();
+  sir->send(con);
   con->read_response();
   con->read_response();
   std::cout << "### Sending calibration request " << std::endl;
