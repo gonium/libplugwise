@@ -27,6 +27,7 @@ int main(int argc,char** argv) {
 
   plugwise::Connection::Ptr con(new plugwise::Connection(argv[1]));
 
+
   std::cout << "### Initializing stick" << std::endl;
   con->send_payload("000A");
   con->read_response();
