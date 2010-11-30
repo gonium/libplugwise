@@ -125,10 +125,5 @@ namespace plugwise {
       std::cout << "<-- Response: " << oss.str() << std::endl;
     }
   }
-
-
-  void Connection::send() {
-      }
-
 };
 

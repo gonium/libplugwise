@@ -20,6 +20,7 @@
 
 #include <connection.hpp>
 #include <requestfactory.hpp>
+#include <responsefactory.hpp>
 #include <request.hpp>
 
 
@@ -30,12 +31,15 @@ int main(int argc,char** argv) {
 
   plugwise::Connection::Ptr con(new plugwise::Connection(argv[1]));
   plugwise::RequestFactory::Ptr reqFactory(new plugwise::RequestFactory("deviceid"));
+  plugwise::ResponseFactory::Ptr respFactory(new plugwise::ResponseFactory(con));
 
   std::cout << "### Initializing stick" << std::endl;
-  plugwise::Request::Ptr sir=reqFactory->getStickInitRequest();
-  sir->send(con);
+  plugwise::Request::Ptr si_req=reqFactory->getStickInitRequest();
+  si_req->send(con);
   con->read_response();
   con->read_response();
+  plugwise::Response::Ptr si_resp=respFactory->receive();
+  std::cout << " ... " << si_resp->str() << std::endl;
   std::cout << "### Sending calibration request " << std::endl;
   con->send_payload("0026000D6F00007293BD");
   con->read_response();

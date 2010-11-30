@@ -2,6 +2,7 @@
 #define LIBPLUGWISE_REQUEST_HPP 1
 
 #include <connection.hpp>
+#include <common.hpp>
 
 namespace plugwise {
   class Request {
