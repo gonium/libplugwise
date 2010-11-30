@@ -36,8 +36,6 @@ int main(int argc,char** argv) {
   std::cout << "### Initializing stick" << std::endl;
   plugwise::Request::Ptr si_req=reqFactory->getStickInitRequest();
   si_req->send(con);
-  con->read_response();
-  con->read_response();
   plugwise::Response::Ptr si_resp=respFactory->receive();
   std::cout << " ... " << si_resp->str() << std::endl;
   std::cout << "### Sending calibration request " << std::endl;
