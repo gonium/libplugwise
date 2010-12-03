@@ -11,15 +11,15 @@ namespace plugwise {
       typedef std::tr1::shared_ptr<StickInitResponse> Ptr;
       StickInitResponse ( const std::string& line1, 
                           const std::string& line2) :
-        _line1(line1), _line2(line2) {};
+        Response(line1, line2) { parse_line2(); };
       virtual std::string str();
       virtual ~StickInitResponse() {};
+      bool is_ok();
 
     private:
       StickInitResponse (const StickInitResponse& original);
       StickInitResponse& operator= (const StickInitResponse& rhs);
-      std::string _line1;
-      std::string _line2;
+      void parse_line2();
       
   };
   
