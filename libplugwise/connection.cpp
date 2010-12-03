@@ -88,8 +88,9 @@ namespace plugwise {
     write(_tty_fd, &suffix, 2);
   }
 
-  void Connection::read_response() {
+  std::string Connection::read_response() {
     // We need a state machine to detect the boundaries of the message.
+    std::string response;
     enum response_state_t state=start;
     bool received=false;
     unsigned char c;
@@ -122,8 +123,10 @@ namespace plugwise {
       std::vector<unsigned char>::iterator it;
       for (it = buffer.begin(); it != buffer.end(); ++it) 
         oss << (*it);
-      std::cout << "<-- Response: " << oss.str() << std::endl;
+      response = oss.str();
+      std::cout << "<-- Response: " << response << std::endl;
     }
+    return response;
   }
 };
 

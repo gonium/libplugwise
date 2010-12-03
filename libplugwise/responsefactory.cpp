@@ -4,8 +4,7 @@
 using namespace plugwise;
 
 Response::Ptr ResponseFactory::receive() {
-
-  _con->read_response();
-  _con->read_response();
-  return Response::Ptr(new StickInitResponse("foo", "bar"));
+  std::string line1(_con->read_response());
+  std::string line2(_con->read_response());
+  return Response::Ptr(new StickInitResponse(line1, line2));
 }

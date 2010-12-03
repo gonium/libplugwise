@@ -32,7 +32,7 @@ namespace plugwise {
     public:
       typedef std::tr1::shared_ptr<Connection> Ptr;
       Connection (const std::string& device);
-      void read_response();
+      std::string read_response();
       void send_payload(const std::string& payload);
       virtual ~Connection();
 
