@@ -18,33 +18,28 @@
  *
  */
 
+#ifndef LIBPLUGWISE_CALIBRATIONREQUEST_HPP
+#define LIBPLUGWISE_CALIBRATIONREQUEST_HPP 1
 
-#ifndef LIBPLUGWISE_REQUESTFACTORY_HPP
-#define LIBPLUGWISE_REQUESTFACTORY_HPP 1
-
-#include "common.hpp"
-#include <stickinitrequest.hpp>
-#include <calibrationrequest.hpp>
-
+#include <request.hpp>
+#include <connection.hpp>
 
 namespace plugwise {
-  class RequestFactory {
+  class CalibrationRequest : public Request {
     public:
-      typedef std::tr1::shared_ptr<RequestFactory> Ptr;
-      RequestFactory (const std::string& device_id) :
-        _device_id(device_id) {};
-      StickInitRequest::Ptr getStickInitRequest() const;
-      CalibrationRequest::Ptr getCalibrationRequest() const;
-      virtual ~RequestFactory() {};
+      typedef std::tr1::shared_ptr<CalibrationRequest> Ptr;
+      CalibrationRequest (std::string circle_mac) :
+        _circle_mac(circle_mac) {};
+      void send(plugwise::Connection::Ptr con);
+      virtual ~CalibrationRequest() {};
 
     private:
-      RequestFactory (const RequestFactory& original);
-      RequestFactory& operator= (const RequestFactory& rhs);
-      std::string _device_id;
+      CalibrationRequest (const CalibrationRequest& original);
+      CalibrationRequest& operator= (const CalibrationRequest& rhs);
+      std::string _circle_mac;
+      
   };
   
 };
 
-
-#endif /* LIBPLUGWISE_REQUESTFACTORY_HPP */
-
+#endif /* LIBPLUGWISE_CALIBRATIONREQUEST_HPP */

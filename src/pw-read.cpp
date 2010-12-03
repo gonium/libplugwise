@@ -30,7 +30,7 @@ int main(int argc,char** argv) {
     " /dev/ttyS1 (for example)" << std::endl;
 
   plugwise::Connection::Ptr con(new plugwise::Connection(argv[1]));
-  plugwise::RequestFactory::Ptr reqFactory(new plugwise::RequestFactory("deviceid"));
+  plugwise::RequestFactory::Ptr reqFactory(new plugwise::RequestFactory("000D6F00007293BD"));
   plugwise::ResponseFactory::Ptr respFactory(new plugwise::ResponseFactory(con));
 
   std::cout << "### Initializing stick" << std::endl;
@@ -42,8 +42,10 @@ int main(int argc,char** argv) {
     std::cout << "initialization successful." << std::endl << std::endl;
   else
     std::cout << "failed to initialize stick" << std::endl;
+
   std::cout << "### Sending calibration request " << std::endl;
-  con->send_payload("0026000D6F00007293BD");
+  plugwise::Request::Ptr ca_req=reqFactory->getCalibrationRequest();
+  ca_req->send(con);
   con->read_response();
   con->read_response();
   std::cout << "### Sending power information request " << std::endl;

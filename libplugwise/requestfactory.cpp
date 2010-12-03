@@ -25,3 +25,7 @@ using namespace plugwise;
 StickInitRequest::Ptr RequestFactory::getStickInitRequest() const {
   return StickInitRequest::Ptr(new StickInitRequest());
 }
+
+CalibrationRequest::Ptr RequestFactory::getCalibrationRequest() const {
+  return CalibrationRequest::Ptr(new CalibrationRequest(_device_id));
+}
