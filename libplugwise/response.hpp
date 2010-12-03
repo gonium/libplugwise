@@ -15,6 +15,7 @@ namespace plugwise {
       virtual std::string str() = 0;
       void parse_line1();
       bool is_ok();
+      virtual bool req_successful() = 0;
       virtual ~Response() {};
 
     protected:

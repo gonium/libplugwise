@@ -36,3 +36,11 @@ void StickInitResponse::parse_line2() {
   // Skipping also the checksum (for now).
 }
 
+
+bool StickInitResponse::req_successful() {
+  if (_response_code == 0x0011 && _network_online) 
+    return true;
+  else
+    return false;
+}
+

@@ -15,6 +15,9 @@ namespace plugwise {
       virtual std::string str();
       virtual ~StickInitResponse() {};
       bool is_ok();
+      virtual bool req_successful();
+      uint32_t get_network_short_id() { return _network_short_id; };
+      bool get_network_online() { return _network_online; };
 
     private:
       StickInitResponse (const StickInitResponse& original);

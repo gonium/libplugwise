@@ -38,7 +38,7 @@ int main(int argc,char** argv) {
   si_req->send(con);
   plugwise::Response::Ptr si_resp=respFactory->receive();
   std::cout << "### " << si_resp->str() << std::endl;
-  if (si_resp->is_ok())
+  if (si_resp->req_successful())
     std::cout << "initialization successful." << std::endl << std::endl;
   else
     std::cout << "failed to initialize stick" << std::endl;
