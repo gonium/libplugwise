@@ -20,7 +20,12 @@ namespace plugwise {
       StickInitResponse (const StickInitResponse& original);
       StickInitResponse& operator= (const StickInitResponse& rhs);
       void parse_line2();
-      
+      uint32_t _response_code;
+      uint32_t _resp_seq_number;
+      std::string _stick_mac_addr;
+      bool _network_online;
+      std::string _network_uuid;
+      uint32_t _network_short_id;
   };
   
 };

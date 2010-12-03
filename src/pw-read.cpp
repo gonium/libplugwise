@@ -37,9 +37,9 @@ int main(int argc,char** argv) {
   plugwise::Request::Ptr si_req=reqFactory->getStickInitRequest();
   si_req->send(con);
   plugwise::Response::Ptr si_resp=respFactory->receive();
-  std::cout << " ... " << si_resp->str() << std::endl;
+  std::cout << "### " << si_resp->str() << std::endl;
   if (si_resp->is_ok())
-    std::cout << "initialization successful." << std::endl;
+    std::cout << "initialization successful." << std::endl << std::endl;
   else
     std::cout << "failed to initialize stick" << std::endl;
   std::cout << "### Sending calibration request " << std::endl;

@@ -20,10 +20,10 @@ namespace plugwise {
     protected:
       std::string _line1;
       std::string _line2;
-      uint32_t command_code;
-      uint32_t sequence_number;
-      uint32_t acknowledge_code;
-      uint32_t checksum;
+      uint32_t _command_code;
+      uint32_t _sequence_number;
+      uint32_t _acknowledge_code;
+      uint32_t _checksum;
 
     private:
       Response (const Response& original);
