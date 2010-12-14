@@ -46,8 +46,13 @@ int main(int argc,char** argv) {
   std::cout << "### Sending calibration request " << std::endl;
   plugwise::Request::Ptr ca_req=reqFactory->getCalibrationRequest();
   ca_req->send(con);
-  con->read_response();
-  con->read_response();
+  plugwise::Response::Ptr ca_resp=respFactory->receive();
+  std::cout << "### " << ca_resp->str() << std::endl;
+  if (ca_resp->req_successful())
+    std::cout << "initialization successful." << std::endl << std::endl;
+  else
+    std::cout << "failed to read calibration values from circle " << std::endl;
+
   std::cout << "### Sending power information request " << std::endl;
   plugwise::Request::Ptr pi_req=reqFactory->getPowerInformationRequest();
   pi_req->send(con);

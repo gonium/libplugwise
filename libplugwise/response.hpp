@@ -42,6 +42,24 @@ namespace plugwise {
       return in >> std::hex >> outValue.value;
     }
   };
+  class float_from_hex   // For use with boost::lexical_cast
+  {
+    float value;
+    public:
+    operator float() const { return value; }
+    friend std::istream& operator>>( std::istream& in, float_from_hex& outValue )
+    {
+      // we receive a binary representation of the float value.
+      // first, dehexify it in a temp memory location.
+      uint32_t tmp=0;
+      in >> std::hex >> tmp;
+      // now, cast it to the real value.
+      outValue.value = *(float*)&tmp;
+      return in;
+    }
+  };
+
+
 };
 
 

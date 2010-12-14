@@ -20,11 +20,26 @@
 
 #include "responsefactory.hpp"
 #include <stickinitresponse.hpp>
+#include <calibrationresponse.hpp>
+#include <boost/lexical_cast.hpp>
 
 using namespace plugwise;
 
 Response::Ptr ResponseFactory::receive() {
   std::string line1(_con->read_response());
   std::string line2(_con->read_response());
-  return Response::Ptr(new StickInitResponse(line1, line2));
+  // The parsing and evaluation of the response lines is done
+  // within the Response class hierarchy. Here, we just 
+  // peek into line2 to determine the right response class to
+  // redirect to.
+  uint32_t response_code =boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
+  switch(response_code) {
+    case 0x0011:
+      return Response::Ptr(new StickInitResponse(line1, line2));
+      break;
+    case 0x0027:
+      return Response::Ptr(new CalibrationResponse(line1, line2));
+      break;
+  }
+
 }
