@@ -21,6 +21,7 @@
 #include "responsefactory.hpp"
 #include <stickinitresponse.hpp>
 #include <calibrationresponse.hpp>
+#include <powerinformationresponse.hpp>
 #include <boost/lexical_cast.hpp>
 
 using namespace plugwise;
@@ -39,6 +40,9 @@ Response::Ptr ResponseFactory::receive() {
       break;
     case 0x0027:
       return Response::Ptr(new CalibrationResponse(line1, line2));
+      break;
+    case 0x0013:
+      return Response::Ptr(new PowerInformationResponse(line1, line2));
       break;
   }
 
