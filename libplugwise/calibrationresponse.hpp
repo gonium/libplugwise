@@ -38,6 +38,10 @@ namespace plugwise {
       bool is_ok();
       virtual bool req_successful();
       std::string get_circle_mac() { return _circle_mac_addr; };
+      float get_gain_a() {return _gain_a;};
+      float get_gain_b() {return _gain_b;};
+      float get_off_ruis() {return _off_ruis;};
+      float get_off_tot() {return _off_tot;};
 
     private:
       CalibrationResponse (const CalibrationResponse& original);
