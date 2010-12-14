@@ -18,35 +18,28 @@
  *
  */
 
+#ifndef LIBPLUGWISE_POWERINFORMATIONREQUEST_HPP
+#define LIBPLUGWISE_POWERINFORMATIONREQUEST_HPP 1
 
-#ifndef LIBPLUGWISE_REQUESTFACTORY_HPP
-#define LIBPLUGWISE_REQUESTFACTORY_HPP 1
-
-#include "common.hpp"
-#include <stickinitrequest.hpp>
-#include <calibrationrequest.hpp>
-#include <powerinformationrequest.hpp>
-
+#include <request.hpp>
+#include <connection.hpp>
 
 namespace plugwise {
-  class RequestFactory {
+  class PowerInformationRequest : public Request {
     public:
-      typedef std::tr1::shared_ptr<RequestFactory> Ptr;
-      RequestFactory (const std::string& device_id) :
-        _device_id(device_id) {};
-      StickInitRequest::Ptr getStickInitRequest() const;
-      CalibrationRequest::Ptr getCalibrationRequest() const;
-      PowerInformationRequest::Ptr getPowerInformationRequest() const;
-      virtual ~RequestFactory() {};
+      typedef std::tr1::shared_ptr<PowerInformationRequest> Ptr;
+      PowerInformationRequest (std::string circle_mac) :
+        _circle_mac(circle_mac) {};
+      void send(plugwise::Connection::Ptr con);
+      virtual ~PowerInformationRequest() {};
 
     private:
-      RequestFactory (const RequestFactory& original);
-      RequestFactory& operator= (const RequestFactory& rhs);
-      std::string _device_id;
+      PowerInformationRequest (const PowerInformationRequest& original);
+      PowerInformationRequest& operator= (const PowerInformationRequest& rhs);
+      std::string _circle_mac;
+      
   };
   
 };
 
-
-#endif /* LIBPLUGWISE_REQUESTFACTORY_HPP */
-
+#endif /* LIBPLUGWISE_POWERINFORMATIONREQUEST_HPP */

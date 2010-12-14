@@ -49,7 +49,8 @@ int main(int argc,char** argv) {
   con->read_response();
   con->read_response();
   std::cout << "### Sending power information request " << std::endl;
-  con->send_payload("0012000D6F00007293BD");
+  plugwise::Request::Ptr pi_req=reqFactory->getPowerInformationRequest();
+  pi_req->send(con);
   con->read_response();
   con->read_response();
 

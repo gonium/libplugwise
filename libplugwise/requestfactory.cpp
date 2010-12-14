@@ -29,3 +29,7 @@ StickInitRequest::Ptr RequestFactory::getStickInitRequest() const {
 CalibrationRequest::Ptr RequestFactory::getCalibrationRequest() const {
   return CalibrationRequest::Ptr(new CalibrationRequest(_device_id));
 }
+
+PowerInformationRequest::Ptr RequestFactory::getPowerInformationRequest() const {
+  return PowerInformationRequest::Ptr(new PowerInformationRequest(_device_id));
+}
