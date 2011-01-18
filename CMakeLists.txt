@@ -5,6 +5,10 @@ if(POLICY CMP0011)
   cmake_policy(SET CMP0011 NEW)
 endif(POLICY CMP0011)
 
+OPTION(ENABLE_LOGGING
+  "Build the project with logging enabled"
+  OFF)
+
 # have the full monty in makefiles
 set(CMAKE_VERBOSE_MAKEFILE true)
 
@@ -52,6 +56,7 @@ set(CMAKE_CXX_FLAGS "-Wall ")
 
 FIND_PACKAGE(Boost 1.34.1 COMPONENTS crc iostreams )
 
+include_directories(${CMAKE_BINARY_DIR})
 
 # Check for some compiler stuff
 include(CMakeBackwardCompatibilityCXX)
@@ -61,11 +66,11 @@ add_subdirectory(src)
 add_subdirectory(libplugwise)
 
 # add some files to the installation target
-INSTALL(FILES README LICENSE DESTINATION share/doc/libflukso)
+INSTALL(FILES README LICENSE DESTINATION share/doc/libplugwise)
 
 # CPACK packaging
 INCLUDE(InstallRequiredSystemLibraries)
-SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "eHZ library")
+SET(CPACK_PACKAGE_DESCRIPTION_SUMMARY "plugwise library")
 SET(CPACK_PACKAGE_VENDOR "Mathias Dalheimer")
 SET(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_CURRENT_SOURCE_DIR}/README")
 SET(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_CURRENT_SOURCE_DIR}/LICENSE")
@@ -73,10 +78,10 @@ SET(CPACK_PACKAGE_VERSION_MAJOR ${V_MAJOR})
 SET(CPACK_PACKAGE_VERSION_MINOR ${V_MINOR})
 SET(CPACK_PACKAGE_VERSION_PATCH ${V_PATCH})
 SET(CPACK_PACKAGE_INSTALL_DIRECTORY "CMake ${CMake_VERSION_MAJOR}.${CMake_VERSION_MINOR}")
-SET(CPACK_PACKAGE_EXECUTABLES "plugwise" "Retrieve energy consumption
+SET(CPACK_PACKAGE_EXECUTABLES "pw-read" "Retrieve energy consumption
 data from a plugwise installation")
 SET(CPACK_SOURCE_STRIP_FILES "")
-SET(CPACK_STRIP_FILES "bin/plugwise")
+SET(CPACK_STRIP_FILES "bin/pw-read")
 INCLUDE(CPack)
 
 
@@ -85,4 +90,5 @@ message("")
 message("***** Configuration *****")
 message("  prefix: ${CMAKE_INSTALL_PREFIX}")
 message("  boost include: ${Boost_INCLUDE_DIRS}")
+message("  extended logging: ${ENABLE_LOGGING}")
 

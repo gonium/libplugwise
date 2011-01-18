@@ -5,6 +5,8 @@
 #)
 #install(FILES ${hdrs} DESTINATION include/plugwise)
 
+configure_file(config.h.in ${CMAKE_BINARY_DIR}/config.h)
+
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}
                     ${Boost_INCLUDE_DIRS})
 file(GLOB all_plugwise_src *.cpp *.hpp)

@@ -33,6 +33,7 @@
 #endif
 
 //#define ENABLE_LOGGING 0
+#include <config.h>
 
 #ifdef ENABLE_LOGGING
 #define LOG(msg) std::cout << msg << std::endl;

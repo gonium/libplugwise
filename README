@@ -1,7 +1,8 @@
 This is a small interface for the Plugwise circles. It is capable of communicating 
 with circles and display the current power usage. A simple call is:
 
- $ pw-read /dev/cu.usbserial-A700drcq 000D6F00007293BD
+ $ pw-read /dev/cu.usbserial-A700drcq 000D6F0000769E4C 000D6F00007293BD
+ 
 
 The first parameter is the serial device of the Plugwise stick, the second is the full ID
 of a plugwise circle.
