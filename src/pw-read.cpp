@@ -40,8 +40,10 @@ int main(int argc,char** argv) {
   std::cout << "### " << si_resp->str() << std::endl;
   if (si_resp->req_successful())
     std::cout << "initialization successful." << std::endl << std::endl;
-  else
+  else {
     std::cout << "failed to initialize stick" << std::endl;
+    return -1;
+  }
 
   std::cout << "### Sending calibration request " << std::endl;
   plugwise::Request::Ptr ca_req=reqFactory->getCalibrationRequest();
