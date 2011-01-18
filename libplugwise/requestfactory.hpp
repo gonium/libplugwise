@@ -32,17 +32,16 @@ namespace plugwise {
   class RequestFactory {
     public:
       typedef std::tr1::shared_ptr<RequestFactory> Ptr;
-      RequestFactory (const std::string& device_id) :
-        _device_id(device_id) {};
+      RequestFactory () {};
       StickInitRequest::Ptr getStickInitRequest() const;
-      CalibrationRequest::Ptr getCalibrationRequest() const;
-      PowerInformationRequest::Ptr getPowerInformationRequest() const;
+      CalibrationRequest::Ptr getCalibrationRequest(const std::string& _device_id) const;
+      PowerInformationRequest::Ptr getPowerInformationRequest(const std::string& _device_id) const;
       virtual ~RequestFactory() {};
 
     private:
       RequestFactory (const RequestFactory& original);
       RequestFactory& operator= (const RequestFactory& rhs);
-      std::string _device_id;
+      
   };
   
 };

@@ -26,10 +26,10 @@ StickInitRequest::Ptr RequestFactory::getStickInitRequest() const {
   return StickInitRequest::Ptr(new StickInitRequest());
 }
 
-CalibrationRequest::Ptr RequestFactory::getCalibrationRequest() const {
+CalibrationRequest::Ptr RequestFactory::getCalibrationRequest(const std::string& _device_id) const {
   return CalibrationRequest::Ptr(new CalibrationRequest(_device_id));
 }
 
-PowerInformationRequest::Ptr RequestFactory::getPowerInformationRequest() const {
+PowerInformationRequest::Ptr RequestFactory::getPowerInformationRequest(const std::string& _device_id) const {
   return PowerInformationRequest::Ptr(new PowerInformationRequest(_device_id));
 }
