@@ -32,6 +32,14 @@
 #  include <memory>
 #endif
 
+//#define ENABLE_LOGGING 0
+
+#ifdef ENABLE_LOGGING
+#define LOG(msg) std::cout << msg << std::endl;
+#else
+#define LOG(msg) 
+#endif
+
 #include <error.hpp>
 #include <stdint.h>
 

@@ -79,9 +79,11 @@ namespace plugwise {
     std::string crc16(oss.str());
     unsigned char suffix[]= "\x0d\x0a";
 
+#ifdef ENABLE_LOGGING
     std::cout.setf(std::ios_base::hex, std::ios_base::basefield);
     std::cout.setf(std::ios_base::showbase);
     std::cout << "--> Payload: " << payload << ", CRC16: " << crc16.c_str() << std::endl;
+#endif
     write(_tty_fd, &prefix, 4);
     write(_tty_fd, payload.c_str(), payload.length());
     write(_tty_fd, crc16.c_str(), 4);
@@ -124,7 +126,9 @@ namespace plugwise {
       for (it = buffer.begin(); it != buffer.end(); ++it) 
         oss << (*it);
       response = oss.str();
+#ifdef ENABLE_LOGGING
       std::cout << "<-- Response: " << response << std::endl;
+#endif
     }
     return response;
   }
