@@ -40,7 +40,7 @@ namespace plugwise {
       std::string get_circle_mac() { return _circle_mac_addr; };
       float get_gain_a() {return _gain_a;};
       float get_gain_b() {return _gain_b;};
-      float get_off_ruis() {return _off_ruis;};
+      float get_off_noise() {return _off_noise;};
       float get_off_tot() {return _off_tot;};
 
     private:
@@ -53,7 +53,7 @@ namespace plugwise {
       float _gain_a;
       float _gain_b;
       float _off_tot;
-      float _off_ruis;
+      float _off_noise;
   };
   
 };

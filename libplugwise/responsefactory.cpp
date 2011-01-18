@@ -45,7 +45,8 @@ Response::Ptr ResponseFactory::receive() {
       return Response::Ptr(new PowerInformationResponse(line1, line2));
       break;
   }
-
+  // Just to keep the compiler happy.
+  throw CommunicationException("received unknown response.");
 }
 
 StickInitResponse::Ptr ResponseFactory::receiveStickInitResponse() {

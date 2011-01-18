@@ -21,6 +21,7 @@
 #include <connection.hpp>
 #include <requestfactory.hpp>
 #include <responsefactory.hpp>
+#include <powerconverter.hpp>
 #include <request.hpp>
 
 
@@ -48,22 +49,30 @@ int main(int argc,char** argv) {
   std::cout << "### Sending calibration request " << std::endl;
   plugwise::Request::Ptr ca_req=reqFactory->getCalibrationRequest();
   ca_req->send(con);
-  plugwise::Response::Ptr ca_resp=respFactory->receive();
+  plugwise::CalibrationResponse::Ptr ca_resp=respFactory->receiveCalibrationResponse();
   std::cout << "### " << ca_resp->str() << std::endl;
   if (ca_resp->req_successful())
-    std::cout << "initialization successful." << std::endl << std::endl;
-  else
+    std::cout << "calibration successful." << std::endl << std::endl;
+  else {
     std::cout << "failed to read calibration values from circle " << std::endl;
+    return -2;
+  }
 
   std::cout << "### Sending power information request " << std::endl;
   plugwise::Request::Ptr pi_req=reqFactory->getPowerInformationRequest();
   pi_req->send(con);
-  plugwise::Response::Ptr pi_resp=respFactory->receive();
+  plugwise::PowerInformationResponse::Ptr pi_resp=
+    respFactory->receivePowerInformationResponse();
   std::cout << "### " << pi_resp->str() << std::endl;
   if (pi_resp->req_successful())
     std::cout << "initialization successful." << std::endl << std::endl;
-  else
+  else {
     std::cout << "failed to read calibration values from circle " << std::endl;
+    return -3;
+  }
 
-
+  std::cout << "Converting to current power consumption..." << std::endl;
+  plugwise::PowerConverter::Ptr pc(new plugwise::PowerConverter(ca_resp));
+  double watt=pc->convertToWatt(pi_resp);
+  std::cout << "Current power usage: " << watt << " Watt" << std::endl;
 }

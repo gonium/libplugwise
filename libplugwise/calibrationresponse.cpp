@@ -39,7 +39,7 @@ std::string CalibrationResponse::str() {
   oss << ", gain_a: " << _gain_a;
   oss << ", gain_b: " << _gain_b;
   oss << ", off_tot: " << _off_tot;
-  oss << ", off_ruis: " << _off_ruis;
+  oss << ", off_noise: " << _off_noise;
   return oss.str();
 }
 
@@ -54,7 +54,7 @@ void CalibrationResponse::parse_line2() {
   _gain_a=boost::lexical_cast<float_from_hex>(_line2.substr(24,8));
   _gain_b=boost::lexical_cast<float_from_hex>(_line2.substr(32,8));
   _off_tot=boost::lexical_cast<float_from_hex>(_line2.substr(40,8));
-  _off_ruis=boost::lexical_cast<float_from_hex>(_line2.substr(48,8));
+  _off_noise=boost::lexical_cast<float_from_hex>(_line2.substr(48,8));
   // Skipping also the checksum (for now).
 }
 
