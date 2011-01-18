@@ -1,7 +1,7 @@
 /**
  * This file is part of libplugwise.
  *
- * (c) Mathias Dalheimer <md@gonium.net>, 2010
+ * (c) Fraunhofer ITWM - Mathias Dalheimer <dalheimer@itwm.fhg.de>, 2010
  *
  * libplugwise is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
