@@ -33,7 +33,7 @@ Response::Ptr ResponseFactory::receive() {
   // within the Response class hierarchy. Here, we just 
   // peek into line2 to determine the right response class to
   // redirect to.
-  uint32_t response_code =boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
+  uint32_t response_code=boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
   switch(response_code) {
     case 0x0011:
       return Response::Ptr(new StickInitResponse(line1, line2));
@@ -44,6 +44,40 @@ Response::Ptr ResponseFactory::receive() {
     case 0x0013:
       return Response::Ptr(new PowerInformationResponse(line1, line2));
       break;
+  }
+
+}
+
+StickInitResponse::Ptr ResponseFactory::receiveStickInitResponse() {
+  std::string line1(_con->read_response());
+  std::string line2(_con->read_response());
+  uint32_t response_code=boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
+  if (response_code == 0x0011) {
+      return StickInitResponse::Ptr(new StickInitResponse(line1, line2));
+  } else {
+    throw DataFormatException("Expected to parse StickInitResponse");
+  }
+}
+
+CalibrationResponse::Ptr ResponseFactory::receiveCalibrationResponse() {
+  std::string line1(_con->read_response());
+  std::string line2(_con->read_response());
+  uint32_t response_code=boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
+  if (response_code == 0x0027) {
+      return CalibrationResponse::Ptr(new CalibrationResponse(line1, line2));
+  } else {
+    throw DataFormatException("Expected to parse CalibrationResponse");
+  }
+}
+
+PowerInformationResponse::Ptr ResponseFactory::receivePowerInformationResponse() {
+  std::string line1(_con->read_response());
+  std::string line2(_con->read_response());
+  uint32_t response_code=boost::lexical_cast<uint32_from_hex>(line2.substr(0,4));
+  if (response_code == 0x0013) {
+      return PowerInformationResponse::Ptr(new PowerInformationResponse(line1, line2));
+  } else {
+    throw DataFormatException("Expected to parse PowerInformationResponse");
   }
 
 }

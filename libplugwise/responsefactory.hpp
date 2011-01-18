@@ -24,6 +24,9 @@
 
 #include <common.hpp>
 #include <response.hpp>
+#include <stickinitresponse.hpp>
+#include <powerinformationresponse.hpp>
+#include <calibrationresponse.hpp>
 #include <connection.hpp>
 
 namespace plugwise {
@@ -33,6 +36,9 @@ namespace plugwise {
       ResponseFactory (Connection::Ptr con) :
         _con(con) {} ;
       Response::Ptr receive();
+      StickInitResponse::Ptr receiveStickInitResponse();
+      CalibrationResponse::Ptr receiveCalibrationResponse();
+      PowerInformationResponse::Ptr receivePowerInformationResponse();
       virtual ~ResponseFactory() {};
 
     private:
