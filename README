@@ -2,13 +2,27 @@ This is a small interface for the Plugwise circles. It is capable of communicati
 with circles and display the current power usage. A simple call is:
 
  $ pw-read /dev/cu.usbserial-A700drcq 000D6F0000769E4C 000D6F00007293BD
+ 000D6F0000769E4C: 44.7917 Watt
+ 000D6F00007293BD: 89.4926 Watt
  
+The first parameter is the serial device of the Plugwise stick, the second and third are 
+the full ID of a plugwise circle. The program outputs the current power consumption in 
+watts.
 
-The first parameter is the serial device of the Plugwise stick, the second is the full ID
-of a plugwise circle.
+BUILDING
+You need to have CMake installed in order to compile the code. Just enter
+ 
+ $ make
 
-The interface has been developed on a Mac, but should run unmodified on any POSIX 
-machine, including Linux and *BSD.
+in order to build the software.  It has been developed on a Mac, but should run 
+unmodified on any POSIX machine, including Linux and *BSD. I also tested it on a 
+Debian/ARM machine.
+
+By default, the code does not print extended logging messages. If you want to enable
+this, edit the cmake cache and set the ENABLE_LOGGING variable to "ON":
+
+ $ ccmake build/
+ $ make
 
 This library builds on the knowledge documented by Maarten Damen in "Plugwise unleashed".
 The original "Source" software has not been analyzed or disassembled in any way.
